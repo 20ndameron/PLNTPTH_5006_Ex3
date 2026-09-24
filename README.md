@@ -290,67 +290,86 @@ After checking the status of the git repo, it shows that only README.md has been
 
 ### 15: Stage and commit `.gitignore`, then README again
 
-The `.gitignore` file was added using `git add` then commited using `git commit -m` followed by a descriptive message. The same steps were followed for the README file.
+The `.gitignore` file was added using `git add` then commited using `git commit -m` followed by a descriptive message. The same steps were followed for the README file. You can confirm all changes were committed used `git status` and then look at changes using `git log`. 
 
 ## Part D: Exploring the FASTQ files with Unix data tools
 
 ### 16: Copy the FASTQ file
 
 ```bash
+# Copy S63_R1.fastq.gz file to data/ and keep same name
+cp /fs/ess/PAS3493/people/ndameron/garrigos/fastq/S63_R1.fastq.gz data/
 
+# Confirm file was copied correctly
+ls data/
 ```
 
 The output of the command was:
 
 ```
-
+# Confirmation file was properly copied
+annot.gtf  S63_R1.fastq.gz
 ```
 
 ### 17: Check Git status again
 
 ```bash
-
+# Check status of git repo
+git status
 ```
 
 The output of the command was:
 
 ```
+On branch main
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   README.md
 
+no changes added to commit (use "git add" and/or "git commit -a")
 ```
 
-*Answer*: Does the FASTQ file show up? Why/why not?
+*Answer*: Does the FASTQ file show up? Why/why not? <br>
+The FASTQ file does not show up in the Git repo because it was added under the `data/` directory, which we previously told Git to ignore using .gitignore. 
 
 ### 18: Number of reads in the FASTQ file
 
 ```bash
-
+# Count the number of reads in FASTQ file (remember each read starts with an @; there are 4 lines per read; need to use zcat to view compressed file)
+zcat data/S63_R1.fastq.gz | grep -c "@"
 ```
 
 The output of the command was:
 
 ```
-
+# Read count using grep
+500000
 ```
 
-*Answer*: Number of reads: _____
+*Answer*: Number of reads: 500000 
+
+You can confirm this is correct by counting the total lines in the file by piping the zcat code into `wc -l` to count total lines, then divide by four.
 
 ### 19: Reads with at least 10 consecutive `N`s
 
 ```bash
-
+# Count reads with at least 10 consecutive `N`s (assume consecutive `N`s only occur in read line and not in quality score line)
+zcat data/S63_R1.fastq.gz | grep -c "NNNNNNNNNN"
 ```
 
 The output of the command was:
 
 ```
-
+# Number of reads with 10 consecutive `N`s
+32612
 ```
 
-*Answer*: Number of reads with at least 10 consecutive `N`s: _____
+*Answer*: Number of reads with at least 10 consecutive `N`s: 32612
 
 ### 20: Stage and commit README again
 
-<!-- No command/output needed here -- we check the repo directly. -->
+Use `git add README.md` and `git commit`
 
 ## Bonus
 
