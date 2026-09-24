@@ -378,7 +378,43 @@ Use `git add README.md` and `git commit`
 <!-- Add any commands you ran and their output in code blocks, as above. -->
 
 *Answer*:
+Question 8 was asking how many lines existed in the GTF table after excluding the header lines. This was determined using the below command which counts all lines in the GTF file starting at line 5 (which excludes the four header lines).
+```bash
+# Total number of lines (excluding headers) for question 8
+tail -n +5 data/annot.gtf | wc -l
+```
+```
+Output:
+408398
+```
+Question 9 was asking the same question, but using a different approach. Rather than using `tail` to exclude the first four lines, we used `grep -v` to select against lines that contain `#`, which occur at the beginning of each header. This, in theory, should only count the lines within the table. This was done with the code below. 
+```bash
+# Total number of lines (excluding headers) for question 9
+grep -v "#" data/annot.gtf | wc -l
+```
+```
+Output:
+408397
+```
+This leads to a discrepency of one line between the two commands. Upon further investigation of the GTF, it was found that the GTF file has `###` as its last line (line 408402), which is not picked up when using tail or self count. This was determined using the below code.
+```bash
+grep -n "#" data/annot.gtf | cat
+```
+```
+Output:
+1:#gtf-version 2.2
+2:#!genome-build TS_CPP_V2
+3:#!genome-build-accession NCBI_Assembly:GCF_016801865.2
+4:#!annotation-source NCBI RefSeq GCF_016801865.2-RS_2022_12
+408402:###
+```
+The `###` at line `408402` was included when using the method described for question 8, providing a false answer.
+
 
 ### 22: Concepts/commands you don't (fully) understand
 
 *Answer*:
+
+I feel fairly confident on using the commands we have learned so far. I have even began using many of these commands to analyze metada from a metagenomic dataset that I am looking at potentially using for my research. Commands like `cut`, `sort`, and `uniq` have been extremely useful for creating frequency tables of this metadata, especially since the dataset contains over 1000 variables and over 10,000 samples. I still need to reference my notes when writing the commands as I still forget what some of the commands do, but overall, I feel more confident on using them. 
+
+One concept that I am still unfamiliar with is the structure of the GTF file. Is it correct to state that the GTF file contains annotated genomic sequences from your metagenomic data with the last line being its annotation? How are these files created; are target genomic elements from your metagenomic data annotated with tools like HUMAnN3 to predict functional pathways? What can you do with these GTF files? 
