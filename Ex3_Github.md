@@ -65,8 +65,132 @@ git add README.md
 git commit -m "Updated README.md with GitHub link"
 
 # Add Ex3_Github.md
+git add Ex3_Github.md
 
 # Commit Ex3_Github.md
+git commit -m "Updated Ex3_Github.md file"
 ```
 
 #### 9. Push to the remote and on GitHub, check that the changes were applied in the online repo.
+
+```bash
+git push
+```
+
+# Exercise 2: Login versus compute nodes
+
+#### 1. In OnDemand, open a shell on a login node by clicking “Clusters” in the top bar and then **“Cardinal Shell Access”**. You should see many lines of text printed to the terminal, which is standard information that OSC prints on login (but not compute) nodes, including details about your Project’s usage of its storage quota2.
+
+#### 2. In the Cardinal shell, run the command `hostname`, which prints the name of the node that you’re on (like echo `$HOSTNAME` that you used in GA1). Then, run the same command in your VS Code terminal, and compare the outputs. What in each node name tells you whether it is a login node or a compute node? And which cluster is each node part of?
+
+```
+# Output from `hostname` command in Cardinal shell
+cardinal-login03.hpc.osc.edu
+
+# Output from `hostname` command in VS Code terminal 
+p0220.ten.osc.edu
+```
+A login node is differentiated by the `login03` portion of the output while a compute node is differentiated by a compute ID (`0220`). The cluster is is shown by `cardinal` in the login node and by `p` in the compute node. 
+
+#### 3. Why does the Cardinal shell put you on a login node, whereas your VS Code session is on a compute node? And what does this mean for what you should (not) do in the Cardinal shell? For example, would it be OK to run FastQC on all FASTQ files of the Garrigós data there?
+
+The Cardinal shell puts you on a login node because you have not requested any compute time. The login node just allows you to explore the terminal, your files, and perform basic commands. You should not run any computationally intensive commands or jobs in the login node. These should be submitted as jobs with compute nodes requested. 
+
+#### 4. In the Cardinal shell, navigate to `/fs/ess/PAS3493/people/$USER` and list its contents. Do you see the same files as in VS Code, even though your VS Code session is running on a different cluster?
+
+Navigating to `/fs/ess/PAS3493/people/$USER` in both the Cardinal login node and in the VS Code both show the same files. This is because you are listing your directories/files under `$USER`. Your files are accessbile in both the login and compute nodes. 
+
+#### 4. In your VS Code terminal, load the FastQC module and check that fastqc -v works. Predict whether fastqc -v will also work in the following two scenarios, and then check your predictions and interpret the results:
+- In the Cardinal shell.
+- In a second VS Code terminal (click the + icon in the terminal panel or the downward arrow next to it).
+
+```bash
+# Load Fastqc Module
+module spider fastqc
+module load fastqc/0.12.1 
+
+# Confirm fastqc works (will print `FastQC v0.12.1`)
+fastqc -v
+```
+You are able to load FastQC in both the login node on the Cardinal shell and in a second terminal on VS Code. 
+
+
+#### 6. In the lecture’s self-study exercise on modules, module spider salmon in VS Code said there was no Salmon module. Run the same command in the Cardinal shell. What do you get, and why?
+
+```bash
+# Try and load salmon in VS Code terminal
+module spider salmon
+```
+```
+Lmod has detected the following error:  Unable to find: "salmon".
+```
+```bash
+# Try and load salmon in Cardinal shell
+module spider salmon
+```
+```
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+  salmon: salmon/1.4.0
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+    This module can be loaded directly: module load salmon/1.4.0
+    Help:
+      This module loads salmon
+      Configured and installed with modules:
+      No modules loaded
+
+```
+When you run `module spider salmon` in the VS Code terminal, you are shown an error and are not able to load the module. However, when you run it in the Cardinal Shell, you see that you are able to load it. This is because the module is only available on the Cardinal cluster and not the Pitzer cluster. The ability to load the module has nothing to do with it being a login node vs. compute node. 
+
+# Exercise 3: A specific software version
+
+#### 1. Is FastQC version 0.11.9 available as an OSC module?
+
+FastQC version 0.11.9 is not available as an OSC module
+
+```bash
+module spider fastqc
+```
+```
+fastqc: fastqc/0.12.1
+```
+
+#### 2. Get the URI of a Seqera container that contains FastQC version 0.11.9.
+
+```
+oras://community.wave.seqera.io/library/fastqc:0.11.9--1cc469c72218f8fc
+```
+
+#### 3. Check the container’s FastQC version.
+
+```bash 
+oras://community.wave.seqera.io/library/fastqc:0.11.9--1cc469c72218f8fc
+```
+```
+INFO:    Using cached SIF image
+INFO:    gocryptfs not found, will not be able to use gocryptfs
+FastQC v0.11.9
+```
+
+#### 4. Load the `fastqc/0.12.1` module. You now have access to two different versions of FastQC. Before running anything, **predict** which version `fastqc -v` will print when you run it with and without the container prefix. Then, run both commands to check.
+
+After loading `fastqc/0.12.1` through modules, version 0.12.1 will run if you just use `fastqc` in the terminal. Version 0.11.9 will run only if you use the container prefix. 
+
+```bash
+# Load fastqc module
+module load fastqc/0.12.1
+
+# Check fastqc version
+fastqc -v
+
+# Check fastqc version with container
+apptainer exec oras://community.wave.seqera.io/library/fastqc:0.11.9--1cc469c72218f8fc \
+    fastqc -v
+```
+```
+# Check fastqc version
+FastQC v0.12.1
+
+# Check fastqc version with container
+FastQC v0.11.9
+```
