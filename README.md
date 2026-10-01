@@ -417,4 +417,7 @@ The `###` at line `408402` was included when using the method described for ques
 
 I feel fairly confident on using the commands we have learned so far. I have even began using many of these commands to analyze metada from a metagenomic dataset that I am looking at potentially using for my research. Commands like `cut`, `sort`, and `uniq` have been extremely useful for creating frequency tables of this metadata, especially since the dataset contains over 1000 variables and over 10,000 samples. I still need to reference my notes when writing the commands as I still forget what some of the commands do, but overall, I feel more confident on using them. 
 
-One concept that I am still unfamiliar with is the structure of the GTF file. Is it correct to state that the GTF file contains annotated genomic sequences from your metagenomic data with the last line being its annotation? How are these files created; are target genomic elements from your metagenomic data annotated with tools like HUMAnN3 to predict functional pathways? What can you do with these GTF files? 
+One concept that I am still unfamiliar with is the structure of the GTF file. Is it correct to state that the GTF file contains annotated genomic sequences from your metagenomic data with the last line being its annotation? How are these files created; are target genomic elements from your metagenomic data annotated with tools like HUMAnN3 to predict functional pathways? What can you do with these GTF files?
+
+
+Github repo created on 2026-10-01 (https://github.com/20ndameron/PLNTPTH_5006_Ex3)
